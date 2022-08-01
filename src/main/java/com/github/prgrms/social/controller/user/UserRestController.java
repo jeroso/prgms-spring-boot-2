@@ -8,10 +8,13 @@ import com.github.prgrms.social.model.user.User;
 import com.github.prgrms.social.security.Jwt;
 import com.github.prgrms.social.security.JwtAuthentication;
 import com.github.prgrms.social.service.user.UserService;
+import com.sun.jdi.request.DuplicateRequestException;
+import io.swagger.annotations.ApiParam;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 import static com.github.prgrms.social.controller.ApiResult.OK;
 import static java.util.stream.Collectors.toList;
@@ -30,12 +33,13 @@ public class UserRestController {
   }
 
   @PostMapping(path = "user/exists")
-  public ApiResult<Boolean> checkEmail() {
+  public ApiResult<Boolean> checkEmail(@RequestBody @ApiParam(value = "example:{\"email\":\"song@gmail.com\"}")Map<String, String> request) {
     // TODO 이메일 중복 확인 로직 구현
+    Email email = new Email(request.get("email"));
     // BODY 예시: {
     //	"email": "iyboklee@gmail.com"
     //}
-    return OK(false);
+    return OK(userService.findByEmail(email).isPresent());
   }
 
   @PostMapping(path = "user/join")

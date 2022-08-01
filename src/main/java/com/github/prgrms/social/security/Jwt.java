@@ -84,6 +84,7 @@ public final class Jwt {
   static public class Claims {
     Long userKey;
     // TODO 이름 프로퍼티 추가
+    String name;
     Email email;
     String[] roles;
     Date iat;
@@ -97,6 +98,9 @@ public final class Jwt {
       if (!userKey.isNull())
         this.userKey = userKey.asLong();
       // TODO 이름 프로퍼티 처리
+      Claim name = decodedJWT.getClaim("name");
+      if(!name.isNull())
+        this.name = userKey.asString();
       Claim email = decodedJWT.getClaim("email");
       if (!email.isNull())
         this.email = new Email(email.asString());
